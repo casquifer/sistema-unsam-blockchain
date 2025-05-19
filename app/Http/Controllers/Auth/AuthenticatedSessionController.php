@@ -33,8 +33,21 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = $request->user();
+
+        // Redirección según el rol
+        switch ($user->role) {
+            case 'pime':
+                return redirect()->route('dashboard.pime');
+            case 'universidad':
+                return redirect()->route('dashboard.universidad');
+            case 'estudiante':
+                return redirect()->route('dashboard.estudiante');
+            default:
+                abort(403, 'Rol no autorizado.');
+        }              
     }
+
 
     /**
      * Destroy an authenticated session.
