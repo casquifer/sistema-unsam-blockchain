@@ -27,7 +27,7 @@ const Alumnos = () => {
 
   return (
     <AppLayout>
-      <button style={{ float: 'right' }} onClick={() => post('/logout')}>Logout</button>
+      <button class="logout-btn" onClick={() => post('/logout')}>Logout</button>
       <h1>Ingresar Alumno</h1>
 
       <div id="separador" style={{ height: '50px' }}></div>

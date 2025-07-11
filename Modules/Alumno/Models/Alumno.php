@@ -33,6 +33,7 @@ class Alumno extends Model
         'telefono_emergencia',
         'condicion_especial',
         'fecha_inicio_estudios',
+        'estado_postulacion',
         'fecha_final_estudios'
     ];
 }

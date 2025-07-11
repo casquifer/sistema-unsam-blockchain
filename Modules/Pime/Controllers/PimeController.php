@@ -106,6 +106,11 @@ class PimeController extends Controller
         return Alumno::create($data);
     }
 
-    
+    public function ultimosAlumnos()
+    {
+        return response()->json(Alumno::all());
+    }
+
+
 
 }

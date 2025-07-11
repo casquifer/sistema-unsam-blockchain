@@ -6,7 +6,7 @@ const Notificador = () => {
   const { post } = useForm({});
   return (
     <AppLayout>
-      <button style={{ float: 'right' }} onClick={() => post('/logout')}>Logout</button>
+      <button class="logout-btn" onClick={() => post('/logout')}>Logout</button>
       <h1>Gestión de Notificador</h1>
       <p>Envío masivo de correos.</p>
     </AppLayout>

@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.logout-btn {
+    float: right;
+    background-color: rgb(177, 48, 48);
+    color: white
+}
+
+.ingresar-alumno-btn {
+    background-color: blue;
+    color: white
+}
+
+.sidebar-btn{
+    color: white;
+    border: solid 1px blue;
+    margin-top: 10px; 
+    margin-bottom: 10px;
+}

@@ -10,6 +10,7 @@ Route::middleware(['auth', 'role:pime'])->prefix('pime')->name('pime.')->group(f
         Route::get('/alumnos', [PimeController::class, 'alumnos'])->name('alumnos');
         Route::get('/ingresar-alumnos', [PimeController::class, 'ingresarAlumnos'])->name('ingresar-alumnos');
         Route::post('/guardar-alumno', [PimeController::class, 'guardarAlumno'])->name('guardar-alumno');
+        Route::get('/ultimos-alumnos', [PimeController::class, 'ultimosAlumnos'])->name('ultimos-alumnos');
   
 
         Route::get('/universidades', [PimeController::class, 'universidades'])->name('universidades');
