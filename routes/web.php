@@ -9,9 +9,9 @@ use App\Http\Controllers\PimeDashboardController;
 use App\Http\Controllers\UniversidadDashboardController;
 use App\Http\Controllers\EstudianteDashboardController;
 
-use App\Modules\Alumno\Controllers\AlumnoController;
-use App\Modules\Pime\Controllers\PimeController;
-use App\Modules\Universidad\Controllers\UniversidadController;
+use Modules\Alumno\Controllers\AlumnoController;
+use Modules\Pime\Controllers\PimeController;
+use Modules\Universidad\Controllers\UniversidadController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -29,12 +29,12 @@ Route::middleware(['auth'])->get('/dashboard', function () {
         abort(403, 'Rol no autorizado o no definido.');
     }
 
-    return redirect()->route('dashboard.' . $role);
+    return redirect()->route($role . '.dashboard');
 })->name('dashboard');
 
 
 // Rutas por rol
-Route::middleware(['auth', 'role:pime'])->get('/pime/dashboard', PimeDashboardController::class)->name('dashboard.pime');
+//Route::middleware(['auth', 'role:pime'])->get('/pime/dashboard', PimeDashboardController::class)->name('dashboard.pime');
 Route::middleware(['auth', 'role:universidad'])->get('/universidad/dashboard', UniversidadDashboardController::class)->name('dashboard.universidad');
 Route::middleware(['auth', 'role:estudiante'])->get('/estudiante/dashboard', EstudianteDashboardController::class)->name('dashboard.estudiante');
 
@@ -47,3 +47,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+require base_path('/Modules/Pime/routes/web.php');

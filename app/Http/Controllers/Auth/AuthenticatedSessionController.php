@@ -38,7 +38,7 @@ class AuthenticatedSessionController extends Controller
         // Redirección según el rol
         switch ($user->role) {
             case 'pime':
-                return redirect()->route('dashboard.pime');
+                return redirect()->route('pime.dashboard');    
             case 'universidad':
                 return redirect()->route('dashboard.universidad');
             case 'estudiante':

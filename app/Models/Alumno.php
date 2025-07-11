@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Modules\Alumno\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Alumno extends Model
 {
-    protected $table = 'alumnos';
+    use HasFactory;
 
     protected $fillable = [
         'nombre',
@@ -33,6 +34,12 @@ class Alumno extends Model
         'telefono_emergencia',
         'condicion_especial',
         'fecha_inicio_estudios',
-        'fecha_final_estudios'
+        'fecha_final_estudios',
+        'user_id', // clave foránea
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

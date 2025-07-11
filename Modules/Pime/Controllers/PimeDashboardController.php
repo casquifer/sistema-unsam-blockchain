@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Pime\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class PimeDashboardController extends Controller
 {
@@ -11,5 +12,4 @@ class PimeDashboardController extends Controller
     {
         return Inertia::render('Pime/Dashboard');
     }
-
 }

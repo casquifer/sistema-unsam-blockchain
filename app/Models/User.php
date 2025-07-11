@@ -8,6 +8,10 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
+use App\Models\Alumno;
+use App\Models\UsuarioPime;
+use App\Models\Universidad;
+
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -46,5 +50,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function alumno()
+    {
+        return $this->hasOne(Alumno::class);
+    }
+
+    public function usuarioPime()
+    {
+        return $this->hasOne(UsuarioPime::class);
+    }
+
+    public function universidad()
+    {
+        return $this->hasOne(Universidad::class);
     }
 }

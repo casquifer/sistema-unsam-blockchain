@@ -38,8 +38,9 @@ return new class extends Migration
             $table->text('condicion_especial')->nullable(); // Campo de texto más amplio
             $table->date('fecha_inicio_estudios')->nullable();
             $table->date('fecha_final_estudios')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
-        });
+        });        
     }
 
     /**

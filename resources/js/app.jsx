@@ -1,3 +1,4 @@
+// resources/js/app.jsx o app.js
 import '../css/app.css';
 import './bootstrap';
 
@@ -9,14 +10,17 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) =>
-        resolvePageComponent(
-            `./Pages/${name}.jsx`,
-            import.meta.glob('./Pages/**/*.jsx'),
-        ),
+    resolve: async (name) => {
+        if (name.startsWith('Pime/')) {
+            const pages = import.meta.glob('../../Modules/Pime/Views/js/Pages/**/*.jsx');
+            return resolvePageComponent(`../../Modules/Pime/Views/js/Pages/${name.replace('Pime/', '')}.jsx`, pages);
+        }
+
+        const pages = import.meta.glob('./Pages/**/*.jsx');
+        return resolvePageComponent(`./Pages/${name}.jsx`, pages);
+    },
     setup({ el, App, props }) {
         const root = createRoot(el);
-
         root.render(<App {...props} />);
     },
     progress: {
