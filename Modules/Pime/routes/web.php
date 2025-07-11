@@ -11,7 +11,10 @@ Route::middleware(['auth', 'role:pime'])->prefix('pime')->name('pime.')->group(f
         Route::get('/ingresar-alumnos', [PimeController::class, 'ingresarAlumnos'])->name('ingresar-alumnos');
         Route::post('/guardar-alumno', [PimeController::class, 'guardarAlumno'])->name('guardar-alumno');
         Route::get('/ultimos-alumnos', [PimeController::class, 'ultimosAlumnos'])->name('ultimos-alumnos');
-  
+        Route::get('/perfil-alumnos/{id}', [PimeController::class, 'perfilAlumnos'])->name('perfil-alumnos');
+        Route::patch('/perfil-alumnos/{id}', [PimeController::class, 'actualizarAlumno'])->name('perfil-alumno.actualizar');
+        Route::delete('/borrar-perfil-alumnos/{id}', [PimeController::class, 'eliminarAlumno'])->name('perfil-alumno.eliminar');
+        
 
         Route::get('/universidades', [PimeController::class, 'universidades'])->name('universidades');
         Route::get('/convenios', [PimeController::class, 'convenios'])->name('convenios');

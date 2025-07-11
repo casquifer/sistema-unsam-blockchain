@@ -106,11 +106,73 @@ class PimeController extends Controller
         return Alumno::create($data);
     }
 
+    
     public function ultimosAlumnos()
     {
         return response()->json(Alumno::all());
+    } 
+
+    public function buscarAlumnos(Request $request)
+    {
+        $q = Alumno::query();
+
+        if ($s = $request->input('search')) {
+            $q->where(function ($x) use ($s) {
+                $x->where('nombre','like',"%$s%")
+                ->orWhere('apellido','like',"%$s%")
+                ->orWhere('correo','like',"%$s%");
+            });
+        }
+
+        foreach (['nombre','apellido','correo','universidad','estado_postulacion'] as $campo) {
+            if ($v = $request->input($campo)) {
+                $q->where($campo,'like',"%$v%");
+            }
+        }
+
+        $data = $q->orderByDesc('created_at')->paginate(10);
+
+        return response()->json($data);
     }
 
+
+
+    public function perfilAlumnos($id)
+    {
+        $alumno = Alumno::findOrFail($id);
+
+        return Inertia::render('Pime/PerfilAlumnos', [
+            'alumno' => $alumno
+        ]);
+    }
+
+    public function actualizarAlumno(Request $request, $id)
+    {
+        $alumno = Alumno::findOrFail($id);
+
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
+            'correo' => 'required|email|max:255',
+            'universidad' => 'nullable|string|max:255',
+            'fecha_inicio_estudios' => 'nullable|date',
+            'estado_postulacion' => 'nullable|string|max:255',
+        ]);
+
+        $alumno->update($validated);
+
+        return redirect()->route('pime.perfil-alumnos', ['id' => $alumno->id])
+                 ->with('success', 'Datos actualizados correctamente.');
+    }
+
+    public function eliminarAlumno($id)
+    {
+        $alumno = Alumno::findOrFail($id);
+        $alumno->delete();
+
+        return redirect()->route('pime.alumnos')
+                        ->with('success', 'Alumno eliminado correctamente.');
+    }
 
 
 }

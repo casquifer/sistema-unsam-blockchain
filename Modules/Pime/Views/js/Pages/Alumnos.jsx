@@ -39,22 +39,25 @@ const Alumnos = () => {
       <table className="table">
       <thead>
         <tr>
-          <th>Nombre y Apellido</th>
-          <th>Correo</th>
-          <th>Universidad</th>
-          <th>Fecha Inicio Estudios</th>
-          <th>Estado Postulación</th>
+          <th class="titulo-tabla-alumnos">Nombre y Apellido</th>
+          <th class="titulo-tabla-alumnos">Correo</th>
+          <th class="titulo-tabla-alumnos">Universidad</th>
+          <th class="titulo-tabla-alumnos">Fecha Inicio Estudios</th>
+          <th class="titulo-tabla-alumnos">Estado Postulación</th>
+          <th class="titulo-tabla-alumnos">Perfil</th>
         </tr>
       </thead>
 
       <tbody>
         {alumnos.map((alumno) => (
           <tr key={alumno.id}>
-            <td>{alumno.nombre} {alumno.apellido}</td>
-            <td>{alumno.correo}</td>
-            <td>{alumno.universidad}</td>
-            <td>{alumno.fecha_inicio_estudios}</td>
-            <td>{alumno.estado_postulacion}</td>
+            <td class="fila-tabla-alumno">{alumno.nombre} {alumno.apellido}</td>
+            <td class="fila-tabla-alumno text-center">{alumno.correo}</td>
+            <td class="fila-tabla-alumno text-center">{alumno.universidad}</td>
+            <td class="fila-tabla-alumno text-center">{alumno.fecha_inicio_estudios}</td>
+            <td class="fila-tabla-alumno text-center">{alumno.estado_postulacion}</td>
+            <td class="fila-tabla-alumno text-center"><Link href={`/pime/perfil-alumnos/${alumno.id}`}>Ver</Link>
+            </td>
           </tr>
         ))}
       </tbody>

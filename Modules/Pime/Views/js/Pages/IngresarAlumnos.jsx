@@ -18,7 +18,6 @@ const Alumnos = () => {
     e.preventDefault();
     post('/pime/guardar-alumno', {
       onSuccess: () => {
-        // Mostrar mensaje usando alerta básica por ahora
         alert('Alumno guardado correctamente.');
       },
     });
