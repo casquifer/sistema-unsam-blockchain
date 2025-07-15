@@ -124,7 +124,7 @@ const Materias = () => {
               <td className="fila-tabla-alumno text-center">{materia.escuela}</td>
               <td className="fila-tabla-alumno text-center">{materia.plan}</td>
               <td className="fila-tabla-alumno text-center">
-                <Link href={`/pime/perfil-alumnos/${materia.id}`}>Ver</Link>
+                <Link href={`/pime/perfil-materias/${materia.id}`}>Ver</Link>
               </td>
             </tr>
           ))}

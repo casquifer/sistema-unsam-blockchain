@@ -37,7 +37,7 @@ const PerfilAlumno = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    patch(`/pime/borrar-perfil-alumnos/${alumno.id}`, {
+    patch(`/pime/perfil-alumnos-actualizar/${alumno.id}`, {
       onSuccess: () => {
         alert('Modificación realizada con éxito.');
       },

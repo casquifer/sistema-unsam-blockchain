@@ -161,14 +161,14 @@ class PimeController extends Controller
             'responsable_intercambio' => 'nullable|string|max:255',
             'anio_carrera' => 'nullable|integer',
             'nivel_espaniol' => 'nullable|string|max:255',
-            'correo' => 'required|email|max:255|unique:alumnos,correo,',
+            'correo' => 'required|email|max:255',
             'correo_alternativo' => 'nullable|email|max:255',
             'fecha_inscripcion' => 'nullable|date',
             'genero' => 'nullable|string|max:255',
             'fecha_nacimiento' => 'nullable|date',
             'nacionalidad' => 'nullable|string|max:255',
-            'documento' => 'nullable|integer|unique:alumnos,documento,',
-            'pasaporte' => 'nullable|integer|unique:alumnos,pasaporte,',
+            'documento' => 'nullable|integer',
+            'pasaporte' => 'nullable|integer',
             'telefono' => 'nullable|integer',
             'direccion' => 'nullable|string',
             'contacto_emergencia' => 'nullable|string',
@@ -264,6 +264,42 @@ class PimeController extends Controller
     public function crearMateria(array $data)
     {
         return Materia::create($data);
+    }
+
+    public function perfilMaterias($id)
+    {
+        $materia = Materia::findOrFail($id);
+
+        return Inertia::render('Pime/PerfilMaterias', [
+            'materia' => $materia
+        ]);
+    }
+
+    public function actualizarMaterias(Request $request, $id)
+    {
+        $materia = Materia::findOrFail($id);
+
+        $validated = $request->validate([
+            'nombre_materia' => 'required|string|max:255',
+            'codigo_materia' => 'required|string|max:255',
+            'escuela' => 'required|string|max:255',
+            'plan' => 'nullable|string|max:255',
+        ]);
+        
+
+        $materia->update($validated);
+
+        return redirect()->route('pime.perfil-materias', ['id' => $materia->id])
+                 ->with('success', 'Datos actualizados correctamente.');
+    }
+
+    public function eliminarMaterias($id)
+    {
+        $materia = Materia::findOrFail($id);
+        $materia->delete();
+
+        return redirect()->route('pime.materias')
+                        ->with('success', 'Materia eliminada correctamente.');
     }
 
     public function opcionesFiltroMaterias()

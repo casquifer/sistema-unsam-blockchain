@@ -13,7 +13,7 @@ Route::middleware(['auth', 'role:pime'])->prefix('pime')->name('pime.')->group(f
         Route::post('/guardar-alumno', [PimeController::class, 'guardarAlumno'])->name('guardar-alumno');
         Route::get('/ultimos-alumnos', [PimeController::class, 'ultimosAlumnos'])->name('ultimos-alumnos');
         Route::get('/perfil-alumnos/{id}', [PimeController::class, 'perfilAlumnos'])->name('perfil-alumnos');
-        Route::patch('/perfil-alumnos/{id}', [PimeController::class, 'actualizarAlumno'])->name('perfil-alumno.actualizar');
+        Route::patch('/perfil-alumnos-actualizar/{id}', [PimeController::class, 'actualizarAlumno'])->name('perfil-alumno.actualizar');
         Route::delete('/borrar-perfil-alumnos/{id}', [PimeController::class, 'eliminarAlumno'])->name('perfil-alumno.eliminar');
         // Alumnos filtro y búsqueda
         Route::get('/alumnos-opciones', [PimeController::class, 'opcionesFiltro'])->name('alumnos.opciones');
@@ -23,6 +23,9 @@ Route::middleware(['auth', 'role:pime'])->prefix('pime')->name('pime.')->group(f
         Route::get('/materias', [PimeController::class, 'materias'])->name('materias');
         Route::get('/ingresar-materia', [PimeController::class, 'ingresarMateria'])->name('ingresar-materia');
         Route::post('/guardar-materia', [PimeController::class, 'guardarMateria'])->name('guardar-materia');
+        Route::get('/perfil-materias/{id}', [PimeController::class, 'perfilMaterias'])->name('perfil-materias');
+        Route::patch('/perfil-materias-actualizar/{id}', [PimeController::class, 'actualizarMaterias'])->name('perfil-materias.actualizar');
+        Route::delete('/borrar-perfil-materias/{id}', [PimeController::class, 'eliminarMaterias'])->name('perfil-materias.eliminar');
         // Materias filtro y búsqueda
         Route::get('/materias-opciones', [PimeController::class, 'opcionesFiltroMaterias'])->name('materias.opciones');
         Route::get('/materias-filtrados', [PimeController::class, 'buscarMaterias'])->name('materias.filtrados');

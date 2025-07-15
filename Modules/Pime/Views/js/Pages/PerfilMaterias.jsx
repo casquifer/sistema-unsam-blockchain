@@ -1,30 +1,30 @@
 import React from 'react';
 import AppLayout from '@Pime/Layout/PimeSidebarLayout';
-import { usePage, useForm, Link } from '@inertiajs/react';
+import { useForm, usePage, Link, router } from '@inertiajs/react';
 
-const Alumnos = () => {
-  const { data, setData, post, processing, errors } = useForm({
-    nombre_materia: '',
-    codigo_materia: '',
-    escuela: '',
-    plan: '',
+const PerfilAlumno = () => {
+  const { materia } = usePage().props;
+
+  const { data, setData, patch, processing, errors } = useForm({
+    nombre_materia: materia.nombre_materia || '',
+    codigo_materia: materia.codigo_materia || '',
+    escuela: materia.escuela || '',
+    plan: materia.plan || '',
   });
-
-  const { flash } = usePage().props;
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-    post('/pime/guardar-materia', {
+    patch(`/pime/perfil-materias-actualizar/${materia.id}`, {
       onSuccess: () => {
-        alert('Materia guardada correctamente.');
+        alert('Modificación realizada con éxito.');
       },
     });
   };
-  
+
   return (
     <AppLayout>
       <button class="logout-btn" onClick={() => post('/logout')}>Logout</button>
-      <h1 class="titulos">Ingresar Materia</h1>
+      <h1 class="titulos">Editar Perfil del Alumno</h1>
       <div class="linea-titulos"></div>
 
       <form onSubmit={handleSubmit}>
@@ -58,13 +58,26 @@ const Alumnos = () => {
             Guardar
           </button>
         </div>
+        <button
+          type="button"
+          className="boton-eliminar"
+          onClick={() => {
+            if (confirm('¿Estás seguro de que querés eliminar esta materia?')) {
+              router.delete(`/pime/borrar-perfil-materias/${materia.id}`, {
+                onSuccess: () => alert('Materia eliminada con éxito.')
+              });
+            }
+          }}
+        >
+          Eliminar Materia
+        </button>
       </form>
 
       <br />
-      <Link href="/pime/materias" class="boton-volver">← Volver a la lista</Link>
+      <Link href="/pime/materias"  class="boton-volver">← Volver a la lista</Link>
     </AppLayout>
   );
 };
 
-export default Alumnos;
+export default PerfilAlumno;
 

@@ -5,17 +5,19 @@ const AppLayout = ({ children }) => {
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <aside style={{ width: '220px', backgroundColor: '#4a86e8', color: 'white', padding: '1rem' }}>
-        <h2>Menú:</h2>
+        <div class="logo-unsam-sidebar"></div>
+        <br></br>
+        <h2 class="titulo-sidebar">MODULO PIME</h2>
         <ul style={{ listStyle: 'none', padding: 0 }}>
-          <li><Link href="/pime/dashboard" class="sidebar-btn">Dashboard</Link></li>
-          <li><Link href="/pime/alumnos" class="sidebar-btn">Alumnos</Link></li>
-          <li><Link href="/pime/universidades" class="sidebar-btn">Universidades</Link></li>
-          <li><Link href="/pime/materias" class="sidebar-btn">Materias</Link></li>
-          <li><Link href="/pime/convenios" class="sidebar-btn">Convenios</Link></li>
-          <li><Link href="/pime/postulaciones" class="sidebar-btn">Postulaciones</Link></li>
-          <li><Link href="/pime/certificados" class="sidebar-btn">Certificados</Link></li>
-          <li><Link href="/pime/notificador" class="sidebar-btn">Notificador</Link></li>
-          <li><Link href="/pime/reportes" class="sidebar-btn">Reportes</Link></li>
+          <Link href="/pime/dashboard"><li class="contenedor-sidebar-btn">Dashboard</li></Link>
+          <Link href="/pime/alumnos"><li class="contenedor-sidebar-btn">Alumnos</li></Link>
+          <Link href="/pime/universidades"><li class="contenedor-sidebar-btn">Universidades</li></Link>
+          <Link href="/pime/materias" ><li class="contenedor-sidebar-btn">Materias</li></Link>
+          <Link href="/pime/convenios"><li class="contenedor-sidebar-btn">Convenios</li></Link>
+          <Link href="/pime/postulaciones" ><li class="contenedor-sidebar-btn">Postulaciones</li></Link>
+          <Link href="/pime/certificados" ><li class="contenedor-sidebar-btn">Certificados</li></Link>
+          <Link href="/pime/notificador" ><li class="contenedor-sidebar-btn">Notificador</li></Link>
+          <Link href="/pime/reportes" ><li class="contenedor-sidebar-btn">Reportes</li></Link>
         </ul>
       </aside>
 

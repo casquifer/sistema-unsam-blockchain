@@ -10,11 +10,37 @@
     background-color: '#f5f5f5';
 }
 
-.sidebar-btn{
+.logo-unsam-sidebar{
+    background-image: url(../../public/logo-unsam.png);
+    background-position: center center;
+    width: 70%;
+    height: 10%;
+    margin: auto;
+}
+
+.titulo-sidebar{
     color: white;
-    border: solid 1px blue;
-    margin-top: 10px; 
+    text-align: center;
+    text-decoration: underline;
+    font-size: 1.8vw;
+    font-weight: bold;
+}
+
+.contenedor-sidebar-btn{
+    width: 90%;
+    margin: auto;
+    background-color: white;
+    margin-top: 10px;
     margin-bottom: 10px;
+    text-align: center;
+    color: blue;
+    transition: 0.3s;
+}
+
+.contenedor-sidebar-btn:hover{
+    cursor: pointer;
+    color: white;
+    background-color: blue;
 }
 
 /* GENERAL */
