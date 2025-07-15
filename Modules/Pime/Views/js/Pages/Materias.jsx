@@ -2,27 +2,27 @@ import React, { useEffect, useState } from 'react';
 import AppLayout from '@Pime/Layout/PimeSidebarLayout';
 import { Link, useForm } from '@inertiajs/react';
 
-const Alumnos = () => {
+const Materias = () => {
   const { post } = useForm({});
-  const [alumnos, setAlumnos] = useState([]);
+  const [materias, setMaterias] = useState([]);
   const [pagination, setPagination] = useState([]);
   const [filters, setFilters] = useState({
     nombre: '', correo: '', universidad: '', fecha: '', estado: ''
   });
   const [opciones, setOpciones] = useState({
-    correos: [], universidades: [], fechas: [], estados: []
+    codigo_materia: [], escuela: [], plan: []
   });
 
   useEffect(() => {
-    fetch('/pime/alumnos-filtrados')
+    fetch('/pime/materias-filtrados')
       .then(res => res.json())
       .then(data => {
-        setAlumnos(data.data);
+        setMaterias(data.data);
         setPagination(data.links);
       })
       .catch(err => console.error(err));
 
-    fetch('/pime/alumnos-opciones')
+    fetch('/pime/materias-opciones')
       .then(res => res.json())
       .then(setOpciones)
       .catch(err => console.error(err));
@@ -30,10 +30,10 @@ const Alumnos = () => {
 
   const fetchFiltrados = (params = {}) => {
     const qs = new URLSearchParams(params).toString();
-    fetch(`/pime/alumnos-filtrados?${qs}`)
+    fetch(`/pime/materias-filtrados?${qs}`)
       .then(res => res.json())
       .then(data => {
-        setAlumnos(data.data);
+        setMaterias(data.data);
         setPagination(data.links);
       })
       .catch(err => console.error(err));
@@ -52,7 +52,7 @@ const Alumnos = () => {
     fetch(urlConFiltros)
       .then(res => res.json())
       .then(data => {
-        setAlumnos(data.data);
+        setMaterias(data.data);
         setPagination(data.links);
       })
       .catch(err => console.error(err));
@@ -61,77 +61,70 @@ const Alumnos = () => {
   return (
     <AppLayout>
       <button className="logout-btn" onClick={() => post('/logout')}>Logout</button>
-      <h1 className="titulos">Gestión de Alumnos</h1>
+      <h1 className="titulos">Gestión de Materias</h1>
       <div className="linea-titulos"></div>
-      <p>Lista, búsqueda y gestión de alumnos.</p>
+      <p>Lista, búsqueda y gestión de materias.</p>
 
       <div style={{ height: '50px' }}></div>
 
-      <h1 className="titulos">Ingresar un Alumno</h1>
+      <h1 className="titulos">Ingresar una Materia</h1>
       <br></br>
-      <Link href="/pime/ingresar-alumnos" className="ingresar-btn">Ingresar Alumno</Link>
+      <Link href="/pime/ingresar-materia" className="ingresar-btn">Ingresar Materia</Link>
 
       <div style={{ height: '50px' }}></div>
 
-      <h1 className="titulos">Listado de Alumnos</h1>
+      <h1 className="titulos">Listado de Materias</h1>
 
       <table className="table">
         <thead>
           <tr>
             <th className="titulo-tabla-alumnos">
-              Nombre y Apellido<br />
+              Nombre Materia<br />
               <input
                 type="text"
                 placeholder="Buscar..."
-                value={filters.nombre}
-                onChange={(e) => handleChange('nombre', e.target.value)}
+                value={filters.nombre_materia}
+                onChange={(e) => handleChange('nombre_materia', e.target.value)}
               />
             </th>
             <th className="titulo-tabla-alumnos">
-              Correo<br />
-              <select value={filters.correo} onChange={(e) => handleChange('correo', e.target.value)}>
+              Código Materia<br />
+              <select value={filters.codigo_materia} onChange={(e) => handleChange('codigo_materia', e.target.value)}>
                 <option value="">Todos</option>
-                {opciones.correos.map(c => <option key={c} value={c}>{c}</option>)}
+                {opciones.codigo_materia.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </th>
             <th className="titulo-tabla-alumnos">
-              Universidad<br />
-              <select value={filters.universidad} onChange={(e) => handleChange('universidad', e.target.value)}>
+              Escuela<br />
+              <select value={filters.escuela} onChange={(e) => handleChange('escuela', e.target.value)}>
                 <option value="">Todas</option>
-                {opciones.universidades.map(u => <option key={u} value={u}>{u}</option>)}
+                {opciones.escuela.map(u => <option key={u} value={u}>{u}</option>)}
               </select>
             </th>
             <th className="titulo-tabla-alumnos">
-              Fecha Inicio<br />
-              <select value={filters.fecha} onChange={(e) => handleChange('fecha', e.target.value)}>
+              Plan<br />
+              <select value={filters.plan} onChange={(e) => handleChange('plan', e.target.value)}>
                 <option value="">Todas</option>
-                {opciones.fechas.map(f => <option key={f} value={f}>{f}</option>)}
+                {opciones.plan.map(u => <option key={u} value={u}>{u}</option>)}
               </select>
             </th>
-            <th className="titulo-tabla-alumnos">
-              Estado Postulación<br />
-              <select value={filters.estado} onChange={(e) => handleChange('estado', e.target.value)}>
-                <option value="">Todos</option>
-                {opciones.estados.map(e => <option key={e} value={e}>{e}</option>)}
-              </select>
-            </th>
+            
             <th className="titulo-tabla-alumnos">Perfil</th>
           </tr>
         </thead>
 
         <tbody>
-          {alumnos.length === 0 && (
+          {materias.length === 0 && (
             <tr><td colSpan="6" className="text-center">Sin resultados.</td></tr>
           )}
-          {alumnos.map((alumno) => (
-            <tr key={alumno.id}>
-              <td className="fila-tabla-alumno">{alumno.nombre} {alumno.apellido}</td>
-              <td className="fila-tabla-alumno text-center">{alumno.correo}</td>
-              <td className="fila-tabla-alumno text-center">{alumno.universidad}</td>
-              <td className="fila-tabla-alumno text-center">{alumno.fecha_inicio_estudios}</td>
-              <td className="fila-tabla-alumno text-center">{alumno.estado_postulacion}</td>
+          {materias.map((materia) => (
+            <tr key={materia.id}>
+              <td className="fila-tabla-alumno">{materia.nombre_materia}</td>
+              <td className="fila-tabla-alumno text-center">{materia.codigo_materia}</td>
+              <td className="fila-tabla-alumno text-center">{materia.escuela}</td>
+              <td className="fila-tabla-alumno text-center">{materia.plan}</td>
               <td className="fila-tabla-alumno text-center">
-                <Link href={`/pime/perfil-alumnos/${alumno.id}`}>Ver</Link>
+                <Link href={`/pime/perfil-alumnos/${materia.id}`}>Ver</Link>
               </td>
             </tr>
           ))}
@@ -162,6 +155,6 @@ const Alumnos = () => {
   );
 };
 
-export default Alumnos;
+export default Materias;
 
 
