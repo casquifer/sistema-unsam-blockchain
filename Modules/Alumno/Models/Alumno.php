@@ -34,6 +34,12 @@ class Alumno extends Model
         'condicion_especial',
         'fecha_inicio_estudios',
         'estado_postulacion',
+        'carrera_principal',
+        'materia_principal_1',
+        'materia_principal_2',
+        'materia_principal_3',
+        'materia_optativa_1',
+        'materia_optativa_2',
         'fecha_final_estudios'
     ];
 }

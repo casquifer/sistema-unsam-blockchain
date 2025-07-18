@@ -67,9 +67,10 @@ const Alumnos = () => {
 
       <div style={{ height: '50px' }}></div>
 
-      <h1 className="titulos">Ingresar un Alumno</h1>
-      <br></br>
-      <Link href="/pime/ingresar-alumnos" className="ingresar-btn">Ingresar Alumno</Link>
+      <div className='contenedor-ingresar'>
+        <h1 className="titulos">Ingresar un Alumno</h1>
+        <Link href="/pime/ingresar-alumnos" className="ingresar-btn">+</Link>
+      </div>
 
       <div style={{ height: '50px' }}></div>
 

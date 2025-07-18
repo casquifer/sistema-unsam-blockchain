@@ -8,6 +8,7 @@
     flex: 1;
     padding: 2rem; 
     background-color: '#f5f5f5';
+    padding-bottom: 80px;
 }
 
 .logo-unsam-sidebar{
@@ -22,7 +23,7 @@
     color: white;
     text-align: center;
     text-decoration: underline;
-    font-size: 1.8vw;
+    font-size: 25px;
     font-weight: bold;
 }
 
@@ -42,6 +43,32 @@
     color: white;
     background-color: blue;
 }
+
+/* FOOTER */
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222;
+    color: white;
+    padding: 10px 30px;
+    height: 60px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 10;
+  }
+  
+  .footer-logo {
+    height: 40px;
+  }
+  
+  .footer-text {
+    font-size: 14px;
+    text-align: center;
+    flex: 1;
+  }
+  
 
 /* GENERAL */
 .logout-btn {
@@ -97,15 +124,30 @@
     float: right;
 }
 
+.contenedor-ingresar {
+    display: flex;
+    align-items: center;      
+    gap: 10px;                
+    margin-bottom: 20px;      
+}
+
 .ingresar-btn {
+    width: 30px;
+    height: 30px;
     background-color: blue;
     color: white;
     border: none;
-    padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 10px;
+    text-align: center;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
 }
+
 
 /* PIME-ALUMNOS */
 .titulo-tabla-alumnos {

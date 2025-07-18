@@ -12,6 +12,8 @@ class Materia extends Model
         'nombre_materia',
         'codigo_materia',
         'escuela',
+        'docente',
+        'horario',
         'plan',
     ];
 }

@@ -7,7 +7,8 @@ const Dashboard = () => {
   return (
     <AppLayout>
       <button class="logout-btn" onClick={() => post('/logout')}>Logout</button>
-      <h1>Dashboard</h1>
+      <h1 class="titulos">Panel Principal</h1>
+      <div class="linea-titulos"></div>
       <p>Bienvenido al panel principal.</p>
     </AppLayout>
   );

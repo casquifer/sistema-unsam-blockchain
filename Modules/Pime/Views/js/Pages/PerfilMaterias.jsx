@@ -9,6 +9,8 @@ const PerfilAlumno = () => {
     nombre_materia: materia.nombre_materia || '',
     codigo_materia: materia.codigo_materia || '',
     escuela: materia.escuela || '',
+    docente: materia.docente || '',
+    horario: materia.horario || '',
     plan: materia.plan || '',
   });
   
@@ -44,6 +46,17 @@ const PerfilAlumno = () => {
           <div class="campos-alumnos">
             <label>Escuela*</label><br />
             <input value={data.escuela} onChange={e => setData('escuela', e.target.value)} />
+            {errors.escuela && <div style={{ color: 'red' }}>{errors.escuela}</div>}
+          </div>
+
+          <div class="campos-alumnos">
+            <label>Docente</label><br />
+            <input value={data.docente} onChange={e => setData('docente', e.target.value)} />
+          </div>
+
+          <div class="campos-alumnos">
+            <label>Horario</label><br />
+            <input value={data.horario} onChange={e => setData('horario', e.target.value)} />
           </div>
 
           <div class="campos-alumnos">

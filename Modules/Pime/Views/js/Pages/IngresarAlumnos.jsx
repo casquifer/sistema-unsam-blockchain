@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppLayout from '@Pime/Layout/PimeSidebarLayout';
 import { usePage, useForm, Link } from '@inertiajs/react';
 
@@ -6,10 +6,36 @@ const Alumnos = () => {
   const { data, setData, post, processing, errors } = useForm({
     nombre: '',
     apellido: '',
+    pais: '',
     universidad: '',
     sede_universidad: '',
+    carrera: '',
+    nivel_academico: '',
+    responsable_intercambio: '',
+    anio_carrera: '',
+    nivel_espaniol: '',
     correo: '',
     correo_alternativo: '',
+    fecha_inscripcion: '',
+    genero: '',
+    fecha_nacimiento: '',
+    nacionalidad: '',
+    documento: '',
+    pasaporte: '',
+    telefono: '',
+    direccion: '',
+    contacto_emergencia: '',
+    telefono_emergencia: '',
+    condicion_especial: '',
+    fecha_inicio_estudios: '',
+    estado_postulacion: '',
+    carrera_principal: '',
+    materia_principal_1: '',
+    materia_principal_2: '',
+    materia_principal_3: '',
+    materia_optativa_1: '',
+    materia_optativa_2: '',
+    fecha_final_estudios: ''
   });
 
   const { flash } = usePage().props;
@@ -23,6 +49,25 @@ const Alumnos = () => {
     });
   };
   
+  // Cargar materias
+  const [materias, setMaterias] = useState([]);
+
+  useEffect(() => {
+    fetch('/pime/materias-todas')
+      .then((res) => res.json())
+      .then(setMaterias)
+      .catch((err) => console.error(err));
+  }, []);
+
+  // Cargar carreras
+  const [carreras, setCarreras] = useState([]);
+
+  useEffect(() => {
+    fetch('/pime/carreras-todas')
+      .then((res) => res.json())
+      .then(setCarreras)
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <AppLayout>
@@ -50,7 +95,7 @@ const Alumnos = () => {
         </div>
 
         <div class="campos-alumnos">
-          <label>Universidad</label><br />
+          <label>Universidad Origen</label><br />
           <input value={data.universidad} onChange={e => setData('universidad', e.target.value)} />
         </div>
 
@@ -60,7 +105,7 @@ const Alumnos = () => {
         </div>
 
         <div class="campos-alumnos">
-          <label>Carrera</label><br />
+          <label>Carrera Origen</label><br />
           <input value={data.carrera} onChange={e => setData('carrera', e.target.value)} />
         </div>
 
@@ -169,6 +214,53 @@ const Alumnos = () => {
           </select>
         </div>
 
+        <div className="campos-alumnos">
+          <label>Carrera Principal</label><br />
+          <select value={data.carrera_principal} onChange={e => setData('carrera_principal', e.target.value)}>
+            <option value="">Seleccionar</option>
+            {carreras.map((m) => <option key={m.id} value={m.nombre_carrera}>{m.nombre_carrera}</option>)}
+          </select>
+        </div>
+
+        <div className="campos-alumnos">
+          <label>Materia Principal 1</label><br />
+          <select value={data.materia_principal_1} onChange={e => setData('materia_principal_1', e.target.value)}>
+            <option value="">Seleccionar</option>
+            {materias.map((m) => <option key={m.id} value={m.nombre_materia}>{m.nombre_materia}</option>)}
+          </select>
+        </div>
+
+        <div className="campos-alumnos">
+          <label>Materia Principal 2</label><br />
+          <select value={data.materia_principal_2} onChange={e => setData('materia_principal_2', e.target.value)}>
+            <option value="">Seleccionar</option>
+            {materias.map((m) => <option key={m.id} value={m.nombre_materia}>{m.nombre_materia}</option>)}
+          </select>
+        </div>
+
+        <div className="campos-alumnos">
+          <label>Materia Principal 3</label><br />
+          <select value={data.materia_principal_3} onChange={e => setData('materia_principal_3', e.target.value)}>
+            <option value="">Seleccionar</option>
+            {materias.map((m) => <option key={m.id} value={m.nombre_materia}>{m.nombre_materia}</option>)}
+          </select>
+        </div>
+
+        <div className="campos-alumnos">
+          <label>Materia Optativa 1</label><br />
+          <select value={data.materia_optativa_1} onChange={e => setData('materia_optativa_1', e.target.value)}>
+            <option value="">Seleccionar</option>
+            {materias.map((m) => <option key={m.id} value={m.nombre_materia}>{m.nombre_materia}</option>)}
+          </select>
+        </div>
+
+        <div className="campos-alumnos">
+          <label>Materia Optativa 2</label><br />
+          <select value={data.materia_optativa_2} onChange={e => setData('materia_optativa_2', e.target.value)}>
+            <option value="">Seleccionar</option>
+            {materias.map((m) => <option key={m.id} value={m.nombre_materia}>{m.nombre_materia}</option>)}
+          </select>
+        </div>
 
         <div class="campos-alumnos">
           <label>Fecha final de Estudios</label><br />

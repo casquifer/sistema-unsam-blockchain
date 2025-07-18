@@ -27,10 +27,34 @@ Route::middleware(['auth', 'role:pime'])->prefix('pime')->name('pime.')->group(f
         Route::patch('/perfil-materias-actualizar/{id}', [PimeController::class, 'actualizarMaterias'])->name('perfil-materias.actualizar');
         Route::delete('/borrar-perfil-materias/{id}', [PimeController::class, 'eliminarMaterias'])->name('perfil-materias.eliminar');
         // Materias filtro y búsqueda
+        Route::get('/materias-todas', [PimeController::class, 'materiasTodas'])->name('materias.todas');
         Route::get('/materias-opciones', [PimeController::class, 'opcionesFiltroMaterias'])->name('materias.opciones');
         Route::get('/materias-filtrados', [PimeController::class, 'buscarMaterias'])->name('materias.filtrados');
 
+        // Carreras
+        Route::get('/carreras', [PimeController::class, 'carreras'])->name('carreras');
+        Route::get('/ingresar-carrera', [PimeController::class, 'ingresarCarrera'])->name('ingresar-carrera');
+        Route::post('/guardar-carrera', [PimeController::class, 'guardarCarrera'])->name('guardar-carrera');
+        Route::get('/perfil-carreras/{id}', [PimeController::class, 'perfilCarreras'])->name('perfil-carreras');
+        Route::patch('/perfil-carreras-actualizar/{id}', [PimeController::class, 'actualizarCarrera'])->name('perfil-carreras.actualizar');
+        Route::delete('/borrar-perfil-carreras/{id}', [PimeController::class, 'eliminarCarrera'])->name('perfil-carreras.eliminar');
+        // Carreras filtro y búsqueda
+        Route::get('/carreras-todas', [PimeController::class, 'CarrerasTodas'])->name('carreras.todas');
+        Route::get('/carreras-filtrados', [PimeController::class, 'buscarCarreras'])->name('carreras.filtradas');
+        Route::get('/carreras-opciones', [PimeController::class, 'opcionesFiltroCarreras'])->name('carreras.opciones');
+
+        // Universidades
         Route::get('/universidades', [PimeController::class, 'universidades'])->name('universidades');
+        Route::get('/ingresar-universidad', [PimeController::class, 'ingresarUniversidad'])->name('ingresar-universidad');
+        Route::post('/guardar-universidad', [PimeController::class, 'guardarUniversidad'])->name('guardar-universidad');
+        Route::get('/perfil-universidades/{id}', [PimeController::class, 'perfilUniversidades'])->name('perfil-universidades');
+        Route::patch('/perfil-universidades-actualizar/{id}', [PimeController::class, 'actualizarUniversidad'])->name('perfil-universidades.actualizar');
+        Route::delete('/borrar-perfil-universidad/{id}', [PimeController::class, 'eliminarUniversidad'])->name('perfil-universidades.eliminar');
+        // Universidades filtro y búsqueda
+        Route::get('/universidades-todas', [PimeController::class, 'UniversidadesTodas'])->name('universidades.todas');
+        Route::get('/universidades-filtrados', [PimeController::class, 'buscarUniversidades'])->name('universidades.filtradas');
+        Route::get('/universidades-opciones', [PimeController::class, 'opcionesFiltroUniversidades'])->name('universidades.opciones');
+
         Route::get('/convenios', [PimeController::class, 'convenios'])->name('convenios');
         Route::get('/postulaciones', [PimeController::class, 'postulaciones'])->name('postulaciones');
         Route::get('/certificados', [PimeController::class, 'certificados'])->name('certificados');

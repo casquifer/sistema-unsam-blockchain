@@ -5,14 +5,13 @@ namespace Modules\Pime\Controllers;
 use App\Http\Controllers\Controller;
 
 use Modules\Pime\Models\Pime;
+use Modules\Pime\Models\Carrera;
 use Modules\Pime\Models\Materia;
 use Modules\Alumno\Models\Alumno;
+use Modules\Universidad\Models\Universidad;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-
-
-
 
 class PimeController extends Controller
 {
@@ -116,6 +115,12 @@ class PimeController extends Controller
             'condicion_especial' => 'nullable|string',
             'fecha_inicio_estudios' => 'nullable|date',
             'estado_postulacion' => 'nullable|string|max:255',
+            'carrera_principal' => 'nullable|string|max:255',
+            'materia_principal_1' => 'nullable|string|max:255',
+            'materia_principal_2' => 'nullable|string|max:255',
+            'materia_principal_3' => 'nullable|string|max:255',
+            'materia_optativa_1' => 'nullable|string|max:255',
+            'materia_optativa_2' => 'nullable|string|max:255',
             'fecha_final_estudios' => 'nullable|date',
         ]);
         
@@ -176,6 +181,12 @@ class PimeController extends Controller
             'condicion_especial' => 'nullable|string',
             'fecha_inicio_estudios' => 'nullable|date',
             'estado_postulacion' => 'nullable|string|max:255',
+            'carrera_principal' => 'nullable|string|max:255',
+            'materia_principal_1' => 'nullable|string|max:255',
+            'materia_principal_2' => 'nullable|string|max:255',
+            'materia_principal_3' => 'nullable|string|max:255',
+            'materia_optativa_1' => 'nullable|string|max:255',
+            'materia_optativa_2' => 'nullable|string|max:255',
             'fecha_final_estudios' => 'nullable|date',
         ]);
         
@@ -251,6 +262,8 @@ class PimeController extends Controller
             'nombre_materia' => 'required|string|max:255',
             'codigo_materia' => 'required|string|max:255',
             'escuela' => 'required|string|max:255',
+            'docente' => 'nullable|string|max:255',
+            'horario' => 'nullable|string|max:255',
             'plan' => 'nullable|string|max:255',
         ]);
         
@@ -283,6 +296,8 @@ class PimeController extends Controller
             'nombre_materia' => 'required|string|max:255',
             'codigo_materia' => 'required|string|max:255',
             'escuela' => 'required|string|max:255',
+            'docente' => 'nullable|string|max:255',
+            'horario' => 'nullable|string|max:255',
             'plan' => 'nullable|string|max:255',
         ]);
         
@@ -307,6 +322,8 @@ class PimeController extends Controller
         return response()->json([
             'codigo_materia' => Materia::select('codigo_materia')->orderBy('codigo_materia')->pluck('codigo_materia')->unique()->values(),
             'escuela'        => Materia::select('escuela')->orderBy('escuela')->pluck('escuela')->unique()->values(),
+            'docente'        => Materia::select('docente')->orderBy('docente')->pluck('docente')->unique()->values(),
+            'horario'        => Materia::select('horario')->orderBy('horario')->pluck('horario')->unique()->values(),
             'plan'       => Materia::select('plan')->orderBy('plan')->pluck('plan')->unique()->values(),
         ]);
     }
@@ -326,6 +343,8 @@ class PimeController extends Controller
         foreach ([
             'codigo_materia'      => 'codigo_materia',
             'escuela' => 'escuela',
+            'docente' => 'docente',
+            'horario' => 'horario',
             'plan'       => 'plan',
         ] as $param => $column) {
             if ($value = $request->input($param)) {
@@ -338,4 +357,192 @@ class PimeController extends Controller
         );
     }
 
+    public function materiasTodas()
+    {
+        $materias = Materia::select('id', 'nombre_materia')->orderBy('nombre_materia')->get();
+        return response()->json($materias);
+    }
+
+    // ********** CARRERAS **********
+    public function carreras()
+    {
+        return Inertia::render('Pime/Carreras');
+    }
+
+    public function ingresarCarrera()
+    {
+        return Inertia::render('Pime/IngresarCarrera');
+    }
+
+    public function guardarCarrera(Request $request)
+    {
+        $validated = $request->validate([
+            'nombre_carrera' => 'required|string|max:255',
+            'codigo_carrera' => 'required|string|max:255',
+            'escuela_carrera' => 'required|string|max:255',
+        ]);
+
+        Carrera::create($validated);
+
+        return redirect()->route('pime.carreras')->with('success', 'Carrera creada correctamente.');
+    }
+
+    public function perfilCarreras($id)
+    {
+        $carrera = Carrera::findOrFail($id);
+        return Inertia::render('Pime/PerfilCarreras', compact('carrera'));
+    }
+
+    public function actualizarCarrera(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'nombre_carrera' => 'required|string|max:255',
+            'codigo_carrera' => 'required|string|max:255',
+            'escuela_carrera' => 'required|string|max:255',
+        ]);
+
+        Carrera::findOrFail($id)->update($validated);
+
+        return redirect()->route('pime.carreras')->with('success', 'Carrera actualizada correctamente.');
+    }
+
+    public function eliminarCarrera($id)
+    {
+        Carrera::findOrFail($id)->delete();
+        return redirect()->route('pime.carreras')->with('success', 'Carrera eliminada.');
+    }
+
+    public function carrerasTodas()
+    {
+        $carreras = Carrera::select('id', 'nombre_carrera')->orderBy('nombre_carrera')->get();
+        return response()->json($carreras);
+    }
+
+    public function buscarCarreras(Request $request)
+    {
+        $query = Carrera::query();
+
+        if ($request->filled('nombre_carrera')) {
+            $query->where('nombre_carrera', 'like', '%' . $request->nombre_carrera . '%');
+        }
+        if ($request->filled('codigo_carrera')) {
+            $query->where('codigo_carrera', $request->codigo_carrera);
+        }
+        if ($request->filled('escuela_carrera')) {
+            $query->where('escuela_carrera', $request->escuela_carrera);
+        }
+
+        $carreras = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+
+        return response()->json($carreras);
+    }
+
+    public function opcionesFiltroCarreras()
+    {
+        return response()->json([
+            'codigo_carrera' => Carrera::select('codigo_carrera')->distinct()->pluck('codigo_carrera'),
+            'escuela_carrera' => Carrera::select('escuela_carrera')->distinct()->pluck('escuela_carrera'),
+        ]);
+    }
+
+    // ********** UNIVERSIDADES **********
+    public function ingresarUniversidad()
+    {
+        return Inertia::render('Pime/IngresarUniversidad');
+    }
+
+    public function guardarUniversidad(Request $request)
+    {
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'pais' => 'required|string|max:255',
+            'nombre_contacto' => 'required|string|max:255',
+            'correo' => 'required|string|max:255',
+            'direccion' => 'nullable|string|max:255',
+            'tipo_convenio' => 'required|string|max:255',
+            'fecha_alta_convenio' => 'required|string|max:255',
+            'fecha_vencimiento_convenio' => 'required|string|max:255',
+            'extras' => 'nullable|string|max:255',
+        ]);
+
+        Universidad::create($validated);
+
+        return redirect()->route('pime.universidades')->with('success', 'Universidad creada correctamente.');
+    }
+
+    public function perfilUniversidades($id)
+    {
+        $universidad = Universidad::findOrFail($id);
+        return Inertia::render('Pime/PerfilUniversidad', compact('universidad'));
+    }
+
+    public function actualizarUniversidad(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'pais' => 'required|string|max:255',
+            'nombre_contacto' => 'required|string|max:255',
+            'correo' => 'required|string|max:255',
+            'direccion' => 'nullable|string|max:255',
+            'tipo_convenio' => 'required|string|max:255',
+            'fecha_alta_convenio' => 'required|string|max:255',
+            'fecha_vencimiento_convenio' => 'required|string|max:255',
+            'extras' => 'nullable|string|max:255',
+        ]);
+
+        Universidad::findOrFail($id)->update($validated);
+
+        return redirect()->route('pime.universidades')->with('success', 'Universidad actualizada correctamente.');
+    }
+
+    public function eliminarUniversidad($id)
+    {
+        Universidad::findOrFail($id)->delete();
+        return redirect()->route('pime.universidades')->with('success', 'Universidad eliminada.');
+    }
+
+    public function universidadesTodas()
+    {
+        $universidad = Universidad::select('id', 'nombre')->orderBy('nombre')->get();
+        return response()->json($universidad);
+    }
+
+    public function buscarUniversidades(Request $request)
+    {
+        $query = Universidad::query();
+
+        if ($request->filled('nombre')) {
+            $query->where('nombre', 'like', '%' . $request->nombre . '%');
+        }
+        if ($request->filled('pais')) {
+            $query->where('pais', $request->pais);
+        }
+        if ($request->filled('nombre_contacto')) {
+            $query->where('nombre_contacto', $request->nombre_contacto);
+        }
+        if ($request->filled('correo')) {
+            $query->where('correo', $request->correo);
+        }
+        if ($request->filled('tipo_convenio')) {
+            $query->where('tipo_convenio', $request->tipo_convenio);
+        }
+        if ($request->filled('fecha_vencimiento_convenio')) {
+            $query->where('fecha_vencimiento_convenio', $request->fecha_vencimiento_convenio);
+        }
+
+        $universidad = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+
+        return response()->json($universidad);
+    }
+
+    public function opcionesFiltroUniversidades()
+    {
+        return response()->json([
+            'pais' => Universidad::select('pais')->distinct()->pluck('pais'),
+            'nombre_contacto' => Universidad::select('nombre_contacto')->distinct()->pluck('nombre_contacto'),
+            'correo' => Universidad::select('correo')->distinct()->pluck('correo'),
+            'tipo_convenio' => Universidad::select('tipo_convenio')->distinct()->pluck('tipo_convenio'),
+            'fecha_vencimiento_convenio' => Universidad::select('fecha_vencimiento_convenio')->distinct()->pluck('fecha_vencimiento_convenio'),
+        ]);
+    }
 }
