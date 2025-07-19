@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppLayout from '@Pime/Layout/PimeSidebarLayout';
 import { useForm, usePage, Link, router } from '@inertiajs/react';
 
@@ -25,6 +25,15 @@ const PerfilUniversidad = () => {
       },
     });
   };
+
+  const [convenios, setConvenios] = useState([]);
+
+  useEffect(() => {
+    fetch('/pime/convenios-todas')
+      .then(res => res.json())
+      .then(setConvenios)
+      .catch(err => console.error(err));
+  }, []);
 
   return (
     <AppLayout>
@@ -63,9 +72,14 @@ const PerfilUniversidad = () => {
               <input value={data.direccion} onChange={e => setData('direccion', e.target.value)} />
             </div>
 
-            <div class="campos-alumnos">
-              <label>Tipo Convenio*</label>
-              <input value={data.tipo_convenio} onChange={e => setData('tipo_convenio', e.target.value)} />
+            <div className="campos-alumnos">
+              <label>Convenio*</label>
+              <select value={data.tipo_convenio} onChange={e => setData('tipo_convenio', e.target.value)}>
+                <option value="">Seleccionar</option>
+                {convenios.map((c) => (
+                  <option key={c.id} value={c.nombre}>{c.nombre}</option>
+                ))}
+              </select>
               {errors.tipo_convenio && <div style={{ color: 'red' }}>{errors.tipo_convenio}</div>}
             </div>
 

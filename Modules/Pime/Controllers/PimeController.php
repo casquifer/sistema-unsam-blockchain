@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Modules\Pime\Models\Pime;
 use Modules\Pime\Models\Carrera;
 use Modules\Pime\Models\Materia;
+use Modules\Pime\Models\Convenio;
 use Modules\Alumno\Models\Alumno;
 use Modules\Universidad\Models\Universidad;
 
@@ -543,6 +544,78 @@ class PimeController extends Controller
             'correo' => Universidad::select('correo')->distinct()->pluck('correo'),
             'tipo_convenio' => Universidad::select('tipo_convenio')->distinct()->pluck('tipo_convenio'),
             'fecha_vencimiento_convenio' => Universidad::select('fecha_vencimiento_convenio')->distinct()->pluck('fecha_vencimiento_convenio'),
+        ]);
+    }
+
+    // ********** CONVENIOS **********
+    public function ingresarConvenio()
+    {
+        return Inertia::render('Pime/IngresarConvenio');
+    }
+
+    public function guardarConvenio(Request $request)
+    {
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'tipo' => 'required|string|max:255',
+            'observaciones' => 'nullable|string|max:255',
+        ]);
+
+        Convenio::create($validated);
+
+        return redirect()->route('pime.convenios')->with('success', 'Convenio creado correctamente.');
+    }
+
+    public function perfilConvenios($id)
+    {
+        $convenio = Convenio::findOrFail($id);
+        return Inertia::render('Pime/PerfilConvenios', compact('convenio'));
+    }
+
+    public function actualizarConvenio(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:255',
+            'tipo' => 'required|string|max:255',
+            'observaciones' => 'nullable|string|max:255',
+        ]);
+
+        Convenio::findOrFail($id)->update($validated);
+
+        return redirect()->route('pime.convenios')->with('success', 'Convenio actualizado correctamente.');
+    }
+
+    public function eliminarConvenio($id)
+    {
+        Convenio::findOrFail($id)->delete();
+        return redirect()->route('pime.convenios')->with('success', 'Convenio eliminado.');
+    }
+
+    public function conveniosTodas()
+    {
+        return response()->json(Convenio::select('id', 'nombre')->distinct()->get());
+    }
+
+    public function buscarConvenios(Request $request)
+    {
+        $query = Convenio::query();
+
+        if ($request->filled('nombre')) {
+            $query->where('nombre', 'like', '%' . $request->nombre . '%');
+        }
+        if ($request->filled('tipo')) {
+            $query->where('tipo', $request->tipo);
+        }
+
+        $convenio = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+
+        return response()->json($convenio);
+    }
+
+    public function opcionesFiltroConvenios()
+    {
+        return response()->json([
+            'tipo' => Convenio::select('tipo')->distinct()->pluck('tipo')
         ]);
     }
 }

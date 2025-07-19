@@ -118,7 +118,7 @@ const Universidades = () => {
             </th>
             
             <th className="titulo-tabla-alumnos">
-              Fecha Baja Convenio<br />
+              Baja Convenio<br />
               <select value={filters.fecha_vencimiento_convenio} onChange={(e) => handleChange('fecha_vencimiento_convenio', e.target.value)}>
                 <option value="">Todas</option>
                 {opciones.fecha_vencimiento_convenio.map(f => <option key={f} value={f}>{f}</option>)}

@@ -44,6 +44,11 @@
     background-color: blue;
 }
 
+.select{
+    background-color: #2a74d6;
+    color: white;
+}
+
 /* FOOTER */
 .footer-container {
     display: flex;

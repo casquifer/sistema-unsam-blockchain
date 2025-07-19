@@ -55,7 +55,18 @@ Route::middleware(['auth', 'role:pime'])->prefix('pime')->name('pime.')->group(f
         Route::get('/universidades-filtrados', [PimeController::class, 'buscarUniversidades'])->name('universidades.filtradas');
         Route::get('/universidades-opciones', [PimeController::class, 'opcionesFiltroUniversidades'])->name('universidades.opciones');
 
+        // Convenios
         Route::get('/convenios', [PimeController::class, 'convenios'])->name('convenios');
+        Route::get('/ingresar-convenio', [PimeController::class, 'ingresarConvenio'])->name('ingresar-convenio');
+        Route::post('/guardar-convenio', [PimeController::class, 'guardarConvenio'])->name('guardar-convenio');
+        Route::get('/perfil-convenios/{id}', [PimeController::class, 'perfilConvenios'])->name('perfil-convenios');
+        Route::patch('/perfil-convenios-actualizar/{id}', [PimeController::class, 'actualizarConvenio'])->name('perfil-convenios.actualizar');
+        Route::delete('/borrar-perfil-convenios/{id}', [PimeController::class, 'eliminarConvenio'])->name('perfil-convenios.eliminar');
+        // Convenios filtro y búsqueda
+        Route::get('/convenios-todas', [PimeController::class, 'ConveniosTodas'])->name('convenios.todas');
+        Route::get('/convenios-filtrados', [PimeController::class, 'buscarConvenios'])->name('convenios.filtradas');
+        Route::get('/convenios-opciones', [PimeController::class, 'opcionesFiltroConvenios'])->name('convenios.opciones');
+
         Route::get('/postulaciones', [PimeController::class, 'postulaciones'])->name('postulaciones');
         Route::get('/certificados', [PimeController::class, 'certificados'])->name('certificados');
         Route::get('/notificador', [PimeController::class, 'notificador'])->name('notificador');
