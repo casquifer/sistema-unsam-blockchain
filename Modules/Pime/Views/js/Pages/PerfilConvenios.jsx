@@ -5,7 +5,7 @@ import { useForm, usePage, Link, router } from '@inertiajs/react';
 const PerfilConvenio = () => {
   const { convenio } = usePage().props;
 
-  const { data, setData, patch, processing, errors } = useForm({
+  const { data, setData, patch, post, processing, errors } = useForm({
     nombre: convenio.nombre || '',
     tipo: convenio.tipo || '',
     observaciones: convenio.observaciones || '',

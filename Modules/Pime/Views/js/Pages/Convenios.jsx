@@ -60,7 +60,7 @@ const Convenios = () => {
 
   return (
     <AppLayout>
-      <button className="logout-btn" onClick={() => post('/logout')}>Logout</button>
+      <button className="logout-btn" onClick={() => post('/logout')}>Cerrar Sesión</button>
       <h1 className="titulos">Gestión de Convenios</h1>
       <div className="linea-titulos"></div>
       <p>Lista, búsqueda y gestión de convenios.</p>
@@ -118,23 +118,30 @@ const Convenios = () => {
 
       {/* PAGINACIÓN */}
       <div className="pagination" style={{ marginTop: '20px' }}>
-        {pagination.map((link, i) => (
-          <button
-            key={i}
-            disabled={!link.url || link.active}
-            onClick={() => handlePaginacion(link.url)}
-            dangerouslySetInnerHTML={{ __html: link.label }}
-            style={{
-              marginRight: '6px',
-              padding: '4px 10px',
-              backgroundColor: link.active ? '#007bff' : '#eaeaea',
-              color: link.active ? '#fff' : '#333',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              cursor: link.url ? 'pointer' : 'default'
-            }}
-          />
-        ))}
+        {pagination.map((link, i) => {
+          // Traducción de etiquetas
+          let label = link.label
+          .replace(/Previous/i, 'Anterior')
+          .replace(/Next/i, 'Próximo');
+
+          return (
+            <button
+              key={i}
+              disabled={!link.url || link.active}
+              onClick={() => handlePaginacion(link.url)}
+              dangerouslySetInnerHTML={{ __html: label }}
+              style={{
+                marginRight: '6px',
+                padding: '4px 10px',
+                backgroundColor: link.active ? '#007bff' : '#eaeaea',
+                color: link.active ? '#fff' : '#333',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                cursor: link.url ? 'pointer' : 'default'
+              }}
+            />
+          );
+        })}
       </div>
     </AppLayout>
   );

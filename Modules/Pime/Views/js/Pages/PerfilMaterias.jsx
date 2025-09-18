@@ -5,7 +5,7 @@ import { useForm, usePage, Link, router } from '@inertiajs/react';
 const PerfilAlumno = () => {
   const { materia } = usePage().props;
 
-  const { data, setData, patch, processing, errors } = useForm({
+  const { data, setData, patch, post, processing, errors } = useForm({
     nombre_materia: materia.nombre_materia || '',
     codigo_materia: materia.codigo_materia || '',
     escuela: materia.escuela || '',

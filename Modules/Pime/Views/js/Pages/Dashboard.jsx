@@ -6,7 +6,7 @@ const Dashboard = () => {
   const { post } = useForm({});
   return (
     <AppLayout>
-      <button class="logout-btn" onClick={() => post('/logout')}>Logout</button>
+      <button class="logout-btn" onClick={() => post('/logout')}>Cerrar Sesión</button>
       <h1 class="titulos">Panel Principal</h1>
       <div class="linea-titulos"></div>
       <p>Bienvenido al panel principal.</p>

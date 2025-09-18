@@ -32,6 +32,9 @@ const AppLayout = ({ children }) => {
           <Link href="/pime/alumnos">
             <li className={`contenedor-sidebar-btn ${esRutaActiva('/pime/alumnos') ? 'select' : ''}`}>Alumnos</li>
           </Link>
+          <Link href="/pime/periodos">
+            <li className={`contenedor-sidebar-btn ${esRutaActiva('/pime/periodos') ? 'select' : ''}`}>Periodos</li>
+          </Link>
           <Link href="/pime/postulaciones">
             <li className={`contenedor-sidebar-btn ${esRutaActiva('/pime/postulaciones') ? 'select' : ''}`}>Postulaciones</li>
           </Link>

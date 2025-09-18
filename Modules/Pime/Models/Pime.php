@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Pime\Models;
+namespace Modules\Pime\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

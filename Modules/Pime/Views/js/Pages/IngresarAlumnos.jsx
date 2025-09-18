@@ -26,16 +26,7 @@ const Alumnos = () => {
     direccion: '',
     contacto_emergencia: '',
     telefono_emergencia: '',
-    condicion_especial: '',
-    fecha_inicio_estudios: '',
-    estado_postulacion: '',
-    carrera_principal: '',
-    materia_principal_1: '',
-    materia_principal_2: '',
-    materia_principal_3: '',
-    materia_optativa_1: '',
-    materia_optativa_2: '',
-    fecha_final_estudios: ''
+    condicion_especial: ''
   });
 
   const { flash } = usePage().props;
@@ -45,6 +36,9 @@ const Alumnos = () => {
     post('/pime/guardar-alumno', {
       onSuccess: () => {
         alert('Alumno guardado correctamente.');
+      },
+      onError: (errors) => {
+        alert('Error al guardar el alumno.');
       },
     });
   };
@@ -195,80 +189,8 @@ const Alumnos = () => {
           <input value={data.condicion_especial} onChange={e => setData('condicion_especial', e.target.value)} />
         </div>
 
-        <div class="campos-alumnos">
-          <label>Fecha de Inicio de Estudios</label><br />
-          <input type="date" value={data.fecha_inicio_estudios} onChange={e => setData('fecha_inicio_estudios', e.target.value)} />
         </div>
 
-        <div className="campos-alumnos">
-          <label>Estado de Postulación</label><br />
-          <select
-            value={data.estado_postulacion}
-            onChange={e => setData('estado_postulacion', e.target.value)}
-          >
-            <option value="">Seleccionar estado</option>
-            <option value="Pendiente">Pendiente</option>
-            <option value="Aprobada">Aprobada</option>
-            <option value="Rechazada">Rechazada</option>
-            <option value="Terminada">Terminada</option>
-          </select>
-        </div>
-
-        <div className="campos-alumnos">
-          <label>Carrera Principal</label><br />
-          <select value={data.carrera_principal} onChange={e => setData('carrera_principal', e.target.value)}>
-            <option value="">Seleccionar</option>
-            {carreras.map((m) => <option key={m.id} value={m.nombre_carrera}>{m.nombre_carrera}</option>)}
-          </select>
-        </div>
-
-        <div className="campos-alumnos">
-          <label>Materia Principal 1</label><br />
-          <select value={data.materia_principal_1} onChange={e => setData('materia_principal_1', e.target.value)}>
-            <option value="">Seleccionar</option>
-            {materias.map((m) => <option key={m.id} value={m.nombre_materia}>{m.nombre_materia}</option>)}
-          </select>
-        </div>
-
-        <div className="campos-alumnos">
-          <label>Materia Principal 2</label><br />
-          <select value={data.materia_principal_2} onChange={e => setData('materia_principal_2', e.target.value)}>
-            <option value="">Seleccionar</option>
-            {materias.map((m) => <option key={m.id} value={m.nombre_materia}>{m.nombre_materia}</option>)}
-          </select>
-        </div>
-
-        <div className="campos-alumnos">
-          <label>Materia Principal 3</label><br />
-          <select value={data.materia_principal_3} onChange={e => setData('materia_principal_3', e.target.value)}>
-            <option value="">Seleccionar</option>
-            {materias.map((m) => <option key={m.id} value={m.nombre_materia}>{m.nombre_materia}</option>)}
-          </select>
-        </div>
-
-        <div className="campos-alumnos">
-          <label>Materia Optativa 1</label><br />
-          <select value={data.materia_optativa_1} onChange={e => setData('materia_optativa_1', e.target.value)}>
-            <option value="">Seleccionar</option>
-            {materias.map((m) => <option key={m.id} value={m.nombre_materia}>{m.nombre_materia}</option>)}
-          </select>
-        </div>
-
-        <div className="campos-alumnos">
-          <label>Materia Optativa 2</label><br />
-          <select value={data.materia_optativa_2} onChange={e => setData('materia_optativa_2', e.target.value)}>
-            <option value="">Seleccionar</option>
-            {materias.map((m) => <option key={m.id} value={m.nombre_materia}>{m.nombre_materia}</option>)}
-          </select>
-        </div>
-
-        <div class="campos-alumnos">
-          <label>Fecha final de Estudios</label><br />
-          <input type="date" value={data.fecha_final_estudios} onChange={e => setData('fecha_final_estudios', e.target.value)} />
-        </div>
-        </div>
-
-        <br />
         <div style={{ marginTop: '20px' }}>
         <button type="submit" disabled={processing} className="boton-guardar">
           Guardar

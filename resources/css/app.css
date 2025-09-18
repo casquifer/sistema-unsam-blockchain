@@ -2,6 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
+/* WELCOME */
+.welcome-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f0f4f8, #dbeafe);
+    font-family: 'Segoe UI', sans-serif;
+    color: #1f2937;
+    position: relative;
+    overflow: hidden;
+    background-image: url('/img/intercambio-bg.png'); /* Cambiar por tu imagen */
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .welcome-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 800px;
+    height: 800px;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+  }
+  
+  .welcome-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #003366;
+    padding: 1rem 2rem;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .welcome-logo {
+    height: 50px;
+  }
+  
+  .login-btn {
+    background-color: #2563eb;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-btn:hover {
+    background-color: #1e40af;
+  }
+  
+  .welcome-main {
+    text-align: center;
+    margin-top: 100px;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 1s ease-out;
+  }
+  
+  .welcome-title {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #0f172a;
+  }
+  
+  .welcome-text {
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    color: #334155;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
 /* SIDEBAR */
 .main-content {
     overflow-y: auto;
@@ -76,6 +161,12 @@
   
 
 /* GENERAL */
+.titulo-login{
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
 .logout-btn {
     background-color: red;
     color: white;
@@ -94,7 +185,7 @@
 .linea-titulos {
     width: 80%;
     height: 2px;
-    background-color: black;
+    background-color: #dcdcdc;
     margin-bottom: 10px;
 }
 
@@ -102,7 +193,7 @@
     background-color: blue;
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 0.5rem;
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
@@ -153,6 +244,9 @@
     font-size: 18px;
 }
 
+select{
+    padding-right:2rem;
+}
 
 /* PIME-ALUMNOS */
 .titulo-tabla-alumnos {
@@ -180,10 +274,91 @@
 }
 
 .campos-alumnos {
-    flex: 1 1 30%;
-    min-width: 250px;
+    flex: 1 1 22%;
+    min-width: 200px;
     display: flex;
     flex-direction: column;
+    padding-bottom: 20px;
 }
 
+.boton-toggle-form {
+    background-color: #2563eb;
+    color: white;
+    padding: 0.4rem;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
 
+.boton-toggle-form:hover {
+    background-color: #1e40af;
+}
+
+.datos-perfil-alumno{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 20px;;
+}
+
+.documentos-adjuntos {
+    margin-left: 150px;
+}
+  
+.documentos-adjuntos a {
+    color: #2563eb;
+    text-decoration: underline;
+}
+
+.color-datos{
+    color: #4a86e8;
+}
+
+.titulos-secciones-formulario{
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* POSTULACIONES */
+.contenedor-datos-postulaciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10%;
+  margin-bottom: 20px;
+}
+
+.boton_agregar{
+  background-color: #258c25;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.boton-aceptar-postulacion{
+  background-color: #02aa02;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.boton-rechazar-postulacion {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.input_file {
+  display: none;
+}
+ 

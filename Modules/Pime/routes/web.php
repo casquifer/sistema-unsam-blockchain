@@ -13,7 +13,7 @@ Route::middleware(['auth', 'role:pime'])->prefix('pime')->name('pime.')->group(f
         Route::post('/guardar-alumno', [PimeController::class, 'guardarAlumno'])->name('guardar-alumno');
         Route::get('/ultimos-alumnos', [PimeController::class, 'ultimosAlumnos'])->name('ultimos-alumnos');
         Route::get('/perfil-alumnos/{id}', [PimeController::class, 'perfilAlumnos'])->name('perfil-alumnos');
-        Route::patch('/perfil-alumnos-actualizar/{id}', [PimeController::class, 'actualizarAlumno'])->name('perfil-alumno.actualizar');
+        Route::post('/perfil-alumnos-actualizar/{id}', [PimeController::class, 'actualizarAlumno'])->name('perfil-alumno.actualizar');
         Route::delete('/borrar-perfil-alumnos/{id}', [PimeController::class, 'eliminarAlumno'])->name('perfil-alumno.eliminar');
         // Alumnos filtro y búsqueda
         Route::get('/alumnos-opciones', [PimeController::class, 'opcionesFiltro'])->name('alumnos.opciones');
@@ -67,7 +67,32 @@ Route::middleware(['auth', 'role:pime'])->prefix('pime')->name('pime.')->group(f
         Route::get('/convenios-filtrados', [PimeController::class, 'buscarConvenios'])->name('convenios.filtradas');
         Route::get('/convenios-opciones', [PimeController::class, 'opcionesFiltroConvenios'])->name('convenios.opciones');
 
+        // Periodos
+        Route::get('/periodos', [PimeController::class, 'periodos'])->name('periodos');
+        Route::get('/ingresar-periodo', [PimeController::class, 'ingresarPeriodo'])->name('ingresar-periodo');
+        Route::post('/guardar-periodo', [PimeController::class, 'guardarPeriodo'])->name('guardar-periodo');
+        Route::get('/perfil-periodo/{id}', [PimeController::class, 'perfilPeriodos'])->name('perfil-periodos');
+        Route::patch('/perfil-periodos-actualizar/{id}', [PimeController::class, 'actualizarPeriodo'])->name('perfil-periodo.actualizar');
+        Route::delete('/borrar-perfil-periodos/{id}', [PimeController::class, 'eliminarPeriodo'])->name('perfil-periodo.eliminar');
+        // Carreras filtro y búsqueda
+        Route::get('/periodos-todos', [PimeController::class, 'periodosTodos'])->name('periodos.todos');
+        Route::get('/periodos-filtrados', [PimeController::class, 'buscarPeriodos'])->name('periodos.filtradas');
+        Route::get('/periodos-opciones', [PimeController::class, 'opcionesFiltroPeriodos'])->name('periodos.opciones');
+
+        // Postulaciones
         Route::get('/postulaciones', [PimeController::class, 'postulaciones'])->name('postulaciones');
+        Route::post('/ingresar-postulacion/{id}', [PimeController::class, 'ingresarPostulacion'])->name('ingresar.postulacion');
+        Route::get('/perfil-postulacion/{id}', [PimeController::class, 'perfilPostulacion'])->name('perfil.postulacion');
+        Route::post('/crear-postulacion', [PimeController::class, 'crearPostulacion'])->name('crear.postulacion');
+        Route::post('/aceptar-postulacion/{id}', [PimeController::class, 'aceptarPostulacion'])->name('aceptar.postulacion');
+        Route::post('/rechazar-postulacion/{id}', [PimeController::class, 'rechazarPostulacion'])->name('rechazar.postulacion');
+        Route::post('/guardar-postulacion', [PimeController::class, 'guardarPostulacion'])->name('guardar-postulacion');
+        // Postulacion filtro y búsqueda
+        Route::get('/postulacion-todos', [PimeController::class, 'postulacionTodos'])->name('postulacion.todos');
+        Route::get('/postulacion-filtrados', [PimeController::class, 'buscarPostulacion'])->name('postulacion.filtradas');
+        Route::get('/postulacion-opciones', [PimeController::class, 'opcionesFiltroPostulacion'])->name('postulacion.opciones');
+
+
         Route::get('/certificados', [PimeController::class, 'certificados'])->name('certificados');
         Route::get('/notificador', [PimeController::class, 'notificador'])->name('notificador');
         Route::get('/reportes', [PimeController::class, 'reportes'])->name('reportes');

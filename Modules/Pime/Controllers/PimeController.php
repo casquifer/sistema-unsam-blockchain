@@ -4,15 +4,27 @@ namespace Modules\Pime\Controllers;
 
 use App\Http\Controllers\Controller;
 
+
+use Inertia\Inertia;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+
 use Modules\Pime\Models\Pime;
 use Modules\Pime\Models\Carrera;
 use Modules\Pime\Models\Materia;
 use Modules\Pime\Models\Convenio;
+use Modules\Pime\Models\Postulacion;
+use Modules\Pime\Models\Periodo;
+use Modules\Pime\Models\MateriaPeriodo;
+use Modules\Pime\Models\DocumentoPostulacion;
 use Modules\Alumno\Models\Alumno;
 use Modules\Universidad\Models\Universidad;
 
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+
 
 class PimeController extends Controller
 {
@@ -113,16 +125,7 @@ class PimeController extends Controller
             'direccion' => 'nullable|string',
             'contacto_emergencia' => 'nullable|string',
             'telefono_emergencia' => 'nullable|integer',
-            'condicion_especial' => 'nullable|string',
-            'fecha_inicio_estudios' => 'nullable|date',
-            'estado_postulacion' => 'nullable|string|max:255',
-            'carrera_principal' => 'nullable|string|max:255',
-            'materia_principal_1' => 'nullable|string|max:255',
-            'materia_principal_2' => 'nullable|string|max:255',
-            'materia_principal_3' => 'nullable|string|max:255',
-            'materia_optativa_1' => 'nullable|string|max:255',
-            'materia_optativa_2' => 'nullable|string|max:255',
-            'fecha_final_estudios' => 'nullable|date',
+            'condicion_especial' => 'nullable|string'
         ]);
         
 
@@ -136,7 +139,6 @@ class PimeController extends Controller
     {
         return Alumno::create($data);
     }
-
     
     public function ultimosAlumnos()
     {
@@ -169,7 +171,6 @@ class PimeController extends Controller
             'nivel_espaniol' => 'nullable|string|max:255',
             'correo' => 'required|email|max:255',
             'correo_alternativo' => 'nullable|email|max:255',
-            'fecha_inscripcion' => 'nullable|date',
             'genero' => 'nullable|string|max:255',
             'fecha_nacimiento' => 'nullable|date',
             'nacionalidad' => 'nullable|string|max:255',
@@ -179,24 +180,45 @@ class PimeController extends Controller
             'direccion' => 'nullable|string',
             'contacto_emergencia' => 'nullable|string',
             'telefono_emergencia' => 'nullable|integer',
-            'condicion_especial' => 'nullable|string',
-            'fecha_inicio_estudios' => 'nullable|date',
-            'estado_postulacion' => 'nullable|string|max:255',
-            'carrera_principal' => 'nullable|string|max:255',
-            'materia_principal_1' => 'nullable|string|max:255',
-            'materia_principal_2' => 'nullable|string|max:255',
-            'materia_principal_3' => 'nullable|string|max:255',
-            'materia_optativa_1' => 'nullable|string|max:255',
-            'materia_optativa_2' => 'nullable|string|max:255',
-            'fecha_final_estudios' => 'nullable|date',
+            'condicion_especial' => 'nullable|string'
         ]);
-        
 
+        // Procesar archivos si se subieron
+        /*
+        $archivos = [
+            'archivo_pasaporte',
+            'archivo_visa',
+            'archivo_analitico',
+            'archivo_idioma',
+            'archivo_carta_recomendacion',
+            'archivo_cv'
+        ];
+
+        foreach ($archivos as $campo) {
+            if ($request->hasFile($campo)) {
+                $file = $request->file($campo);
+                $filename = $campo . '.' . $file->getClientOriginalExtension();
+                
+                // Guardar usando el disco 'public'
+                $file->storeAs('archivos_alumnos/' . $alumno->id , $filename, 'public');
+                
+                // Actualizar el nombre del archivo en BD
+                $validated[$campo] = $filename;
+            } else {
+                // Mantener el archivo actual si no se sube uno nuevo
+                $validated[$campo] = $alumno->{$campo};
+            }
+        }
+        */
+        
+        // ✅ Actualizar alumno
         $alumno->update($validated);
 
         return redirect()->route('pime.perfil-alumnos', ['id' => $alumno->id])
-                 ->with('success', 'Datos actualizados correctamente.');
+            ->with('success', 'Datos actualizados correctamente.');
     }
+
+
 
     public function eliminarAlumno($id)
     {
@@ -211,9 +233,7 @@ class PimeController extends Controller
     {
         return response()->json([
             'correos'       => Alumno::select('correo')->orderBy('correo')->pluck('correo')->unique()->values(),
-            'universidades' => Alumno::select('universidad')->orderBy('universidad')->pluck('universidad')->unique()->values(),
-            'fechas'        => Alumno::select('fecha_inicio_estudios')->orderBy('fecha_inicio_estudios')->pluck('fecha_inicio_estudios')->unique()->values(),
-            'estados'       => Alumno::select('estado_postulacion')->orderBy('estado_postulacion')->pluck('estado_postulacion')->unique()->values(),
+            'universidades' => Alumno::select('universidad')->orderBy('universidad')->pluck('universidad')->unique()->values()
         ]);
     }
 
@@ -232,9 +252,7 @@ class PimeController extends Controller
         // Filtros por columna exacta
         foreach ([
             'correo'      => 'correo',
-            'universidad' => 'universidad',
-            'fecha'       => 'fecha_inicio_estudios',
-            'estado'      => 'estado_postulacion',
+            'universidad' => 'universidad'
         ] as $param => $column) {
             if ($value = $request->input($param)) {
                 $q->where($column, $value);
@@ -616,6 +634,294 @@ class PimeController extends Controller
     {
         return response()->json([
             'tipo' => Convenio::select('tipo')->distinct()->pluck('tipo')
+        ]);
+    }
+
+    // ********** PERIODOS **********
+    public function periodos()
+    {
+        return Inertia::render('Pime/Periodos');
+    }
+
+    public function ingresarPeriodo()
+    {
+        return Inertia::render('Pime/IngresarPeriodo');
+    }
+
+    public function guardarPeriodo(Request $request)
+    {
+        $validated = $request->validate([
+            'nombre' => '',
+            'fecha_inicio' => '',
+            'fecha_fin' => '',
+        ]);
+
+        Periodo::create($validated);
+
+        return redirect()->route('pime.periodos')->with('success', 'Periodo creado correctamente.');
+    }
+
+    public function perfilPeriodos($id)
+    {
+        $periodo = Periodo::findOrFail($id);
+        return Inertia::render('Pime/PerfilPeriodos', compact('periodo'));
+    }
+
+    public function actualizarPeriodo(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'nombre' => '',
+            'fecha_inicio' => '',
+            'fecha_fin' => '',
+        ]);
+
+        Periodo::findOrFail($id)->update($validated);
+
+        return redirect()->route('pime.periodos')->with('success', 'Periodo actualizado correctamente.');
+    }
+
+    public function eliminarPeriodo($id)
+    {
+        Periodo::findOrFail($id)->delete();
+        return redirect()->route('pime.periodos')->with('success', 'Periodo eliminado.');
+    }
+
+    public function periodosTodos()
+    {
+        $periodos = Periodo::select('id', 'nombre')->orderBy('id')->get();
+        return response()->json($periodos);
+    }
+
+    public function buscarPeriodos(Request $request)
+    {
+        $query = Periodo::query();
+
+        if ($request->filled('nombre')) {
+            $query->where('nombre', 'like', '%' . $request->nombre . '%');
+        }
+        if ($request->filled('fecha_inicio')) {
+            $query->where('fecha_inicio', $request->fecha_inicio);
+        }
+        if ($request->filled('fecha_fin')) {
+            $query->where('fecha_fin', $request->fecha_fin);
+        }
+
+        $periodos = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+
+        return response()->json($periodos);
+    }
+
+    public function opcionesFiltroPeriodos()
+    {
+        return response()->json([
+            'fecha_inicio' => Periodo::select('fecha_inicio')->distinct()->pluck('fecha_inicio'),
+            'fecha_fin' => Periodo::select('fecha_fin')->distinct()->pluck('fecha_fin'),
+        ]);
+    }
+
+    // ********** POSTULACIONES **********
+    public function ingresarPostulacion ($id)
+    {
+        $alumno = Alumno::findOrFail($id);
+
+        return Inertia::render('Pime/IngresarPostulacion', [
+            'alumno' => $alumno
+        ]);
+    }
+
+    public function crearPostulacion(Request $request)
+    {
+        // 1) Validar que venga el payload y (opcional) archivos
+        $request->validate([
+            'payload'     => ['required', 'string'],
+            'archivos.*'  => ['file'], // agregá max:, mimetypes: si necesitás
+        ]);
+
+        $payload = json_decode($request->input('payload'), true);
+        if (!is_array($payload)) {
+            return response()->json(['message' => 'Payload inválido'], 422);
+        }
+
+        // 2) Validar el contenido del payload
+        $v = Validator::make($payload, [
+            'alumno_id'          => 'required|integer|exists:alumnos,id',
+            'periodo_inicio_id'  => 'required|integer|exists:periodos,id',
+            'periodo_fin_id'     => 'nullable|integer|exists:periodos,id',
+            'carrera_principal'  => 'nullable|string|max:255',
+            'estado'             => 'required|string|max:255',
+
+            'materias'                           => 'array',
+            'materias.*.materia_id'              => 'required|integer|exists:materias,id',
+            'materias.*.estado'                  => 'required|string|max:255',
+            'materias.*.acceso_campus_virtual'   => 'nullable|string|max:255',
+            'materias.*.fecha_examen_final'      => 'nullable',
+            'materias.*.materia_prioridad'       => 'nullable|string|max:50',
+            'materias.*.periodo'                 => 'nullable', 
+
+            'archivos_meta'              => 'array',
+            'archivos_meta.*.nombre'     => 'required|string',
+            'archivos_meta.*.periodo_id' => 'nullable|integer|exists:periodos,id',
+        ]);
+
+        if ($v->fails()) {
+            return response()->json(['message' => 'Datos inválidos', 'errors' => $v->errors()], 422);
+        }
+
+        // 3) Extraer datos
+        $alumnoId        = $payload['alumno_id'];
+        $periodoInicioId = $payload['periodo_inicio_id'];
+        $periodoFinId    = $payload['periodo_fin_id'] ?? null;
+        $carrera         = $payload['carrera_principal'] ?? null;
+        $estado          = $payload['estado'];
+        $materias        = $payload['materias'] ?? [];
+        $archivosMeta    = $payload['archivos_meta'] ?? [];
+        $files           = $request->file('archivos', []);
+
+        $storedPaths = [];
+
+        DB::beginTransaction();
+        try {
+            // 4) Crear la Postulación
+            $postulacion = Postulacion::create([
+                'alumno_id'         => $alumnoId,
+                'periodo_inicio_id' => $periodoInicioId,
+                'periodo_fin_id'    => $periodoFinId,
+                'carrera_principal' => $carrera,
+                'estado'            => $estado,
+            ]);
+
+            // 5) Guardar Materias (tabla: materia_periodo)
+            $materiasIds = [];
+            foreach ($materias as $m) {
+                // Si 'periodo' es numérico, úsalo como periodo_id; si no, usar el periodo_inicio de la postulación
+                $periodoIdMateria = (isset($m['periodo']) && is_numeric($m['periodo']))
+                    ? (int) $m['periodo']
+                    : $periodoInicioId;
+
+                $mp = MateriaPeriodo::create([
+                    'alumno_id'              => $alumnoId,
+                    'periodo_id'             => $periodoIdMateria,
+                    'materia_id'             => $m['materia_id'],
+                    'materia_estado'         => $m['estado'],
+                    'acceso_campus_virtual'  => isset($m['acceso_campus_virtual']) ? (bool)$m['acceso_campus_virtual'] : null,
+                    'fecha_examen_final'     => $m['fecha_final'] ?? null,
+                    'materia_tipo'           => $m['materia_tipo'] ?? null
+                    // 'materia_prioridad'    => ..., // sólo si existe la columna
+                ]);
+
+                $materiasIds[] = $mp->id;
+            }
+
+            // 6) Guardar Archivos (disk public) + registros en documentos_postulacion
+            $baseDir = "postulaciones/{$alumnoId}/{$periodoInicioId}";
+            $archivosSaved = [];
+
+            foreach ($files as $i => $file) {
+                if (!$file) continue;
+
+                $origName = $file->getClientOriginalName() ?: 'archivo';
+                $basename = pathinfo($origName, PATHINFO_FILENAME);
+                $ext      = $file->getClientOriginalExtension() ?: 'bin';
+
+                $safeBase = Str::slug($basename, '-');
+                if ($safeBase === '') $safeBase = 'archivo';
+
+                $filename = $safeBase . '-' . Str::lower(Str::uuid()) . '.' . strtolower($ext);
+
+                $path = $file->storeAs($baseDir, $filename, 'public'); // storage/app/public/...
+                $storedPaths[] = $path;
+
+                // Si en archivos_meta vino un periodo_id por índice, lo respetamos; si no, usamos periodo_inicio_id
+                $periodoIdArchivo = data_get($archivosMeta, "{$i}.periodo_id", $periodoInicioId);
+
+                $doc = DocumentoPostulacion::create([
+                    'alumno_id' => $alumnoId,
+                    'periodo_id'=> $periodoIdArchivo,
+                    'nombre'    => $origName, // guardamos nombre original para mostrar
+                    'ruta'      => $path,     // ruta relativa en disk 'public'
+                ]);
+
+                $archivosSaved[] = [
+                    'id'         => $doc->id,
+                    'nombre'     => $doc->nombre,
+                    'ruta'       => $doc->ruta,
+                    'public_url' => Storage::disk('public')->url($path), // /storage/...
+                ];
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'message'         => 'Postulación creada con éxito',
+                'postulacion_id'  => $postulacion->id,
+                'materias_ids'    => $materiasIds,
+                'archivos'        => $archivosSaved,
+            ], 201);
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            // limpieza de archivos físicos si algo falló
+            foreach ($storedPaths as $p) {
+                try { Storage::disk('public')->delete($p); } catch (\Throwable $t) {}
+            }
+
+            return response()->json([
+                'message' => 'No se pudo crear la postulación',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function postulacionTodos()
+    {
+        $postulacion = Postulacion::select('id', 'alumno_id')->orderBy('id')->get();
+        return response()->json($postulacion);
+    }
+
+    public function buscarPostulacion(Request $request)
+    {
+        $query = Postulacion::query();
+
+        if ($request->filled('alumno_id')) {
+            $query->where('alumno_id', 'like', '%' . $request->nombre . '%');
+        }
+        if ($request->filled('periodo_inicio_id')) {
+            $query->where('periodo_inicio_id', $request->periodo_inicio_id);
+        }
+        if ($request->filled('periodo_fin_id')) {
+            $query->where('periodo_fin_id', $request->periodo_fin_id);
+        }
+        if ($request->filled('carrera_principal')) {
+            $query->where('carrera_principal', $request->carrera_principal);
+        }
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        $postulacion = $query->orderBy('id', 'desc')->paginate(10)->withQueryString();
+
+        return response()->json($postulacion);
+    }
+
+    public function opcionesFiltroPostulacion()
+    {
+        return response()->json([
+            'periodo_inicio_id' => Postulacion::select('periodo_inicio_id')->distinct()->pluck('periodo_inicio_id'),
+            'periodo_fin_id' => Postulacion::select('periodo_fin_id')->distinct()->pluck('periodo_fin_id'),
+        ]);
+    }
+
+    public function perfilPostulacion($id)
+    {
+        $postulacion = Postulacion::findOrFail($id);
+
+        $alumno = Alumno::findOrFail($postulacion->alumno_id);
+
+
+        return Inertia::render('Pime/PerfilPostulacion', [
+            'postulacion' => $postulacion,
+            'alumno' => $alumno
         ]);
     }
 }

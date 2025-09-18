@@ -6,7 +6,7 @@ const Certificados = () => {
   const { post } = useForm({});
   return (
     <AppLayout>
-      <button class="logout-btn" onClick={() => post('/logout')}>Logout</button>
+      <button class="logout-btn" onClick={() => post('/logout')}>Cerrar Sesión</button>
       <h1>Gestión de Certificados</h1>
       <p>Lista, búsqueda y gestión de certificados.</p>
     </AppLayout>

@@ -8,7 +8,6 @@ export default defineConfig({
         alias: {
             '@': path.resolve(__dirname, 'resources/js'),
             '@Pime': path.resolve(__dirname, 'Modules/Pime/Views/js'),
-            '@': path.resolve(__dirname, 'resources/js'),
         },
     },
     plugins: [

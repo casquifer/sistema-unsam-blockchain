@@ -5,7 +5,7 @@ import { useForm, usePage, Link, router } from '@inertiajs/react';
 const PerfilUniversidad = () => {
   const { universidad } = usePage().props;
 
-  const { data, setData, patch, processing, errors } = useForm({
+  const { data, setData, patch, post, processing, errors } = useForm({
     nombre: universidad.nombre || '',
     pais: universidad.pais || '',
     nombre_contacto: universidad.nombre_contacto || '',
@@ -19,7 +19,7 @@ const PerfilUniversidad = () => {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    patch(`/pime/perfil-universidad-actualizar/${universidad.id}`, {
+    patch(`/pime/perfil-universidades-actualizar/${universidad.id}`, {
       onSuccess: () => {
         alert('Modificación realizada con éxito.');
       },

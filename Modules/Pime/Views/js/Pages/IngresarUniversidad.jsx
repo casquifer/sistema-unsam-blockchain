@@ -112,7 +112,7 @@ const IngresarUniversidad = () => {
       </form>
 
       <br></br>
-      <Link href="/pime/alumnos" className="boton-volver">← Volver a la lista</Link>
+      <Link href="/pime/universidades" className="boton-volver">← Volver a la lista</Link>
     </AppLayout>
   );
 };
